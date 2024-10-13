@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Image, ListGroup, Button } from 'react-bootstrap';
-import { ApiClient } from '../Api/ApiClient'; // Importamos correctamente el ApiClient
+import { ApiClient } from '../Api/ApiClient';
 
 const ProductDetails = () => {
-  const { id } = useParams(); // Obtenemos el ID del producto desde la URL
+  const { id } = useParams(); // Obtener el ID de la URL
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const data = await ApiClient.Publication.getById(id); // Llamada a la API con getById
+        const data = await ApiClient.Publication.getById(id); // Llamada a la API para obtener el producto
         setProduct(data);
       } catch (err) {
         console.error('Error obteniendo detalles del producto:', err);
@@ -42,25 +42,17 @@ const ProductDetails = () => {
           <h4 className="text-success">${product.price}</h4>
 
           <ListGroup className="mb-3">
-            <ListGroup.Item>
-              <strong>Descripción:</strong>
-            </ListGroup.Item>
+            <ListGroup.Item><strong>Descripción:</strong></ListGroup.Item>
             <ListGroup.Item>{product.description}</ListGroup.Item>
           </ListGroup>
 
           <ListGroup className="mb-3">
-            <ListGroup.Item>
-              <strong>Ubicación:</strong>
-            </ListGroup.Item>
+            <ListGroup.Item><strong>Ubicación:</strong></ListGroup.Item>
             <ListGroup.Item>{product.location}</ListGroup.Item>
           </ListGroup>
 
-          <Button variant="primary" block>
-            Añadir al carrito
-          </Button>
-          <Button variant="outline-secondary" block>
-            Comprar ahora
-          </Button>
+          <Button variant="primary" block>Añadir al carrito</Button>
+          <Button variant="outline-secondary" block>Comprar ahora</Button>
         </Col>
       </Row>
     </Container>

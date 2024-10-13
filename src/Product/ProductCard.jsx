@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import { Card, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom'; // Cambiar a useNavigate
+import { useNavigate } from 'react-router-dom';
 
 const ProductCard = ({ publication }) => {
-  const navigate = useNavigate(); // Cambiar a useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log('Image URL:', publication.image_url); // Log the image URL
   }, [publication]);
 
   const handleConsultClick = () => {
-    // Navegar a la ruta de detalles del producto, pasando el id de la publicación
+    console.log('Navigating to product ID:', publication.id); // Verificar el ID antes de navegar
     navigate(`/product/${publication.id}`);
   };
 
@@ -33,7 +33,6 @@ const ProductCard = ({ publication }) => {
         <Card.Text><strong>Precio:</strong> {publication.price}</Card.Text>
         <Card.Text><strong>Ubicación:</strong> {publication.location}</Card.Text>
 
-        {/* Botón de "Consultar" que navega al detalle del producto */}
         <Button variant="primary" className="consultar-button" onClick={handleConsultClick}>
           Consultar
         </Button>

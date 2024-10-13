@@ -55,6 +55,14 @@ export const ApiClient = {
         throw new Error('Error fetching publications');
       }
       return await response.json();
+    },getById: async (id) => {
+      try {
+        const response = await axios.get(`${API_URL}/publications/${id}`);
+        return response.data;
+      } catch (error) {
+        console.error('Error obteniendo publicación por ID:', error);
+        throw error;
+      }
     },
   }
 }
