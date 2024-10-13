@@ -8,11 +8,11 @@ const CreatePost = ({ showModal, handleCloseModal, categories }) => {
         description: '',
         price: '',
         location: '',
-        images: [],
+        image: null, // Mantener una sola imagen
         category: '',
     });
     const [errorMessage, setErrorMessage] = useState('');
-    const [imageInputKey, setImageInputKey] = useState(Date.now()); // To reset file input
+    const [imageInputKey, setImageInputKey] = useState(Date.now()); // Para resetear el input de imagen
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -20,17 +20,10 @@ const CreatePost = ({ showModal, handleCloseModal, categories }) => {
     };
 
     const handlePostImageUpload = (event) => {
-        const files = Array.from(event.target.files);
+        const file = event.target.files[0]; // Obtener el primer archivo
         setNewPost({
             ...newPost,
-            images: [...newPost.images, ...files],
-        });
-    };
-
-    const handleRemoveImage = (index) => {
-        setNewPost({
-            ...newPost,
-            images: newPost.images.filter((_, i) => i !== index),
+            image: file, // Almacenar una sola imagen
         });
     };
 
@@ -50,9 +43,9 @@ const CreatePost = ({ showModal, handleCloseModal, categories }) => {
             formData.append('publication[location]', newPost.location);
             formData.append('publication[category_id]', newPost.category);
 
-            newPost.images.forEach((image, index) => {
-                formData.append(`publication[images][${index}]`, image);
-            });
+            if (newPost.image) {
+                formData.append('publication[image]', newPost.image); // Solo una imagen
+            }
 
             await ApiClient.Publication.create(formData);
             handleCloseModal();
@@ -61,10 +54,10 @@ const CreatePost = ({ showModal, handleCloseModal, categories }) => {
                 description: '',
                 price: '',
                 location: '',
-                images: [],
+                image: null, // Resetear la imagen
                 category: '',
             });
-            setImageInputKey(Date.now()); // Reset file input
+            setImageInputKey(Date.now()); // Resetear el input de imagen
         } catch (error) {
             const errorMsg = error.response?.data?.errors?.join(', ') || 'Error creating the publication. Please try again.';
             setErrorMessage(errorMsg);
@@ -146,42 +139,21 @@ const CreatePost = ({ showModal, handleCloseModal, categories }) => {
                     </Form.Group>
 
                     <Form.Group controlId="postImage" className="mt-3">
-                        <Form.Label>Agregar Imágenes</Form.Label>
+                        <Form.Label>Agregar Imagen</Form.Label>
                         <Form.Control
                             key={imageInputKey}
                             type="file"
-                            accept="image/*,video/*"
+                            accept="image/*" // Solo aceptar imágenes
                             onChange={handlePostImageUpload}
-                            multiple
                         />
                     </Form.Group>
 
                     <div className="image-preview-container mt-3">
-                        {newPost.images.map((image, index) => (
-                            <div key={index} className="image-preview-wrapper" style={{ display: 'inline-block', margin: '10px', position: 'relative' }}>
-                                <span
-                                    style={{
-                                        position: 'absolute',
-                                        top: '0',
-                                        right: '0',
-                                        backgroundColor: 'red',
-                                        color: 'white',
-                                        borderRadius: '50%',
-                                        cursor: 'pointer',
-                                        padding: '2px 6px',
-                                        fontSize: '12px',
-                                    }}
-                                    onClick={() => handleRemoveImage(index)}
-                                >
-                                    x
-                                </span>
-                                {image.type.startsWith('image/') ? (
-                                    <Image src={URL.createObjectURL(image)} style={{ width: '100px', height: '100px' }} fluid />
-                                ) : (
-                                    <video src={URL.createObjectURL(image)} style={{ width: '100px', height: '100px' }} controls />
-                                )}
+                        {newPost.image && (
+                            <div className="image-preview-wrapper" style={{ display: 'inline-block', margin: '10px' }}>
+                                <Image src={URL.createObjectURL(newPost.image)} style={{ width: '100px', height: '100px' }} fluid />
                             </div>
-                        ))}
+                        )}
                     </div>
 
                     {errorMessage && <div className="text-danger mt-3">{errorMessage}</div>}

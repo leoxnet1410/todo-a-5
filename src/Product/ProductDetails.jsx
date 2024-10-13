@@ -39,7 +39,7 @@ const ProductDetails = () => {
         </Col>
         <Col md={6}>
           <h2>{product.name}</h2>
-          <h4 className="text-success">${product.price}</h4>
+          <h4 className="text-success" > <strong>Precio </strong>{product.price}</h4>
 
           <ListGroup className="mb-3">
             <ListGroup.Item><strong>Descripción:</strong></ListGroup.Item>
@@ -51,8 +51,8 @@ const ProductDetails = () => {
             <ListGroup.Item>{product.location}</ListGroup.Item>
           </ListGroup>
 
-          <Button variant="primary" block>Añadir al carrito</Button>
-          <Button variant="outline-secondary" block>Comprar ahora</Button>
+          <Button variant="primary" block>Consultar</Button>
+          <Button variant="outline-secondary" block>Suscribrise</Button>
         </Col>
       </Row>
     </Container>
